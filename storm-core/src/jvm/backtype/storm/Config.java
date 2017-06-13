@@ -44,12 +44,6 @@ import java.util.Map;
 public class Config extends HashMap<String, Object> {
 
     /**
-     * Hostname to use for JMX remote profiling
-     */
-    public static final String STORM_PROFILING_RMI_HOSTNAME = "storm.profiling.rmi.hostname";
-    public static final Object STORM_PROFILING_RMI_HOSTNAME_SCHEMA = String.class;
-
-    /**
      * The transporter for communication among Storm tasks
      */
     public static final String STORM_MESSAGING_TRANSPORT = "storm.messaging.transport";

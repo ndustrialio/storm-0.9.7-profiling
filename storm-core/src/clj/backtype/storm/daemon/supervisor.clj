@@ -507,7 +507,8 @@
   (let [replacement-map {"%ID%"          (str port)
                          "%WORKER-ID%"   (str worker-id)
                          "%TOPOLOGY-ID%"    (str topology-id)
-                         "%WORKER-PORT%" (str port)}
+                         "%WORKER-PORT%" (str port)
+                         "%JMX-PORT%" (str (+ port 1000))}
         sub-fn #(reduce (fn [string entry]
                           (apply clojure.string/replace string entry))
                         %
@@ -552,20 +553,10 @@
           logfilename (str "worker-" port ".log")
           
 
-          profiler-options (if-let [hostname (System/getProperty "storm.profiling.rmi.hostname")]
-                        [(str "-Dcom.sun.management.jmxremote")
-                        (str "-Dcom.sun.management.jmxremote.port=" (+ port 1000)) ;; JMX port will be worker port + 1000
-                        (str "-Dcom.sun.management.jmxremote.local.only=false")
-                        (str "-Dcom.sun.management.jmxremote.authenticate=false")
-                        (str "-Dcom.sun.management.jmxremote.ssl=false")
-                        (str "-Djava.rmi.server.hostname=" hostname)]
-                        [])
-
           command (concat
                     [(java-cmd) "-server"]
                     worker-childopts
                     topo-worker-childopts
-                    profiler-options
                     [(str "-Djava.library.path=" jlp)
                      (str "-Dlogfile.name=" logfilename)
                      (str "-Dstorm.home=" storm-home)
